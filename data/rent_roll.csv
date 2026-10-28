@@ -1,0 +1,11 @@
+unit_id,property,sqft,tenant_id,tenant_name,lease_start,lease_end,monthly_rent,status
+NG-101,Northgate Industrial Park,12000,T001,Acme Logistics LLC,2024-01-01,2027-12-31,9000,Occupied
+NG-102,Northgate Industrial Park,8000,T002,Blue Harbor Freight Inc,2023-06-01,2026-05-31,6400,Occupied
+NG-103,Northgate Industrial Park,15000,,,,,,Vacant
+NG-104,Northgate Industrial Park,10000,T003,Copperline Fabrication,2025-03-01,2028-02-29,7500,Occupied
+RB-201,Riverbend Logistics Center,20000,T004,Delta Cold Storage,2022-09-01,2027-08-31,16000,Occupied
+RB-202,Riverbend Logistics Center,6000,T005,Evergreen Packaging Co,2025-01-01,2026-12-31,4800,Occupied
+RB-203,Riverbend Logistics Center,9000,,,,,,Vacant
+RB-204,Riverbend Logistics Center,11000,T006,Falcon Parts Supply,2024-07-01,2029-06-30,8250,Occupied
+RB-205,Riverbend Logistics Center,7000,T007,Granite Tool Rental,2026-02-01,2028-01-31,5600,Occupied
+RB-206,Riverbend Logistics Center,12000,,,,,,Vacant

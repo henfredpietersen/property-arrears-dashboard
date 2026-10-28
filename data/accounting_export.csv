@@ -1,0 +1,42 @@
+txn_date,unit_ref,customer,txn_type,amount,reference
+2026-08-01,NG101,ACME LOGISTICS,rent,"$9,000.00",INV-0801-101
+2026-08-01,ng-102,Blue Harbour Freight,rent,6400,INV-0801-102
+2026-08-01,NG 104,Copperline Fabrication,rent,7500,INV-0801-104
+2026-08-01,Unit RB-201,Delta Cold Storage,rent,"16,000.00",INV-0801-201
+2026-08-01,RB-202,Evergreen Packaging,rent,4800,INV-0801-202
+2026-08-01,RB-204,Falcon Parts Supply,rent,8250,INV-0801-204
+2026-08-01,RB-205,Granite Tool Rental,rent,5600,INV-0801-205
+2026-08-02,RB-202,EVERGREEN PACKAGING,payment,4800,PAY-0802-202
+2026-08-03,NG-101,Acme Logistics,payment,9000,PAY-0803-101
+2026-08-04,NG-104,Copperline Fabrication,payment,7500,PAY-0804-104
+2026-08-05,NG-102,Blue Harbor Freight,payment,6400,PAY-0805-102
+2026-08-06,RB-204,Falcon Parts Supply,payment,8250,PAY-0806-204
+2026-08-07,RB-205,Granite Tool Rental,payment,5600,PAY-0807-205
+2026-08-15,RB-201,Delta Cold Storage,late_fee,800,INV-0815-201
+2026-09-01,NG101,ACME LOGISTICS,rent,"$9,000.00",INV-0901-101
+2026-09-01,ng-102,Blue Harbour Freight,rent,6400,INV-0901-102
+2026-09-01,NG 104,Copperline Fabrication,rent,7500,INV-0901-104
+2026-09-01,Unit RB-201,Delta Cold Storage,rent,"16,000.00",INV-0901-201
+2026-09-01,RB-202,Evergreen Packaging,rent,4800,INV-0901-202
+2026-09-01,RB-204,Falcon Parts Supply,rent,8250,INV-0901-204
+2026-09-01,RB-205,Granite Tool Rental,rent,5600,INV-0901-205
+2026-09-02,NG-101,Acme Logistics,payment,9000,PAY-0902-101
+2026-09-03,RB-202,Evergreen Packaging,payment,4800,PAY-0903-202
+2026-09-05,RB-204,Falcon Parts Supply,payment,8250,PAY-0905-204
+2026-09-06,RB-205,Granite Tool Rental,payment,5600,PAY-0906-205
+2026-09-08,NG-104,Copperline Fabrication,payment,5000,PAY-0908-104
+2026-10-01,NG101,ACME LOGISTICS,rent,"$9,000.00",INV-1001-101
+2026-10-01,ng-102,Blue Harbour Freight,rent,6400,INV-1001-102
+2026-10-01,NG 104,Copperline Fabrication,rent,7500,INV-1001-104
+2026-10-01,Unit RB-201,Delta Cold Storage,rent,"16,000.00",INV-1001-201
+2026-10-01,RB-202,Evergreen Packaging,rent,4800,INV-1001-202
+2026-10-01,RB-204,Falcon Parts Supply,rent,8250,INV-1001-204
+2026-10-01,RB-205,Granite Tool Rental,rent,5600,INV-1001-205
+2026-10-01,RB-203,,rent,4000,INV-1001-203
+2026-10-02,RB-202,Evergreen Packaging,payment,4800,PAY-1002-202
+2026-10-04,NG-101,Acme Logistics,payment,9000,PAY-1004-101
+2026-10-04,NG-101,Acme Logistics,payment,9000,PAY-1004-101
+2026-10-09,RB-205,Granite Tool Rental,payment,3000,PAY-1009-205
+2026-10-12,NG-109,Harbor Point Logistics,payment,1500,PAY-1012-109
+2026-10-15,RB-202,Evergreen Packaging,credit,200,CRN-1015-202
+2026-10-29,RB-204,Granite Tool Rental,payment,8250,PAY-1029-204
