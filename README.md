@@ -20,7 +20,7 @@ Open [`docs/sample_dashboard.html`](docs/sample_dashboard.html) in a browser for
 
 A step-by-step interactive page shows the whole flow: the three messy inputs, cleaning, matching (and refusing to match), oldest-charge-first aging for any tenant, a "what if we skipped the duplicate check?" switch, the AI summary guard you can try yourself, and the final result.
 
-- Open [`docs/walkthrough.html`](docs/walkthrough.html) locally, or see it on outview.co.za (link added once published).
+- **Live:** [outview.co.za/case-study-property-arrears](https://outview.co.za/case-study-property-arrears/), or open [`docs/walkthrough.html`](docs/walkthrough.html) locally.
 - **Every number on the page comes from a real pipeline run.** `python walkthrough/build.py` exports the results (including a decision log for every accounting row and the FIFO trace per tenant) and embeds them in `docs/walkthrough.js`. The page replays them rather than re-calculating anything.
 - The one rule the page runs itself, the AI summary number check, is tested against the Python version on the same inputs (`tests/test_walkthrough_page.py`, runs where Playwright is installed).
 - CI rebuilds the page script and fails if it doesn't match the committed copy, so the published page can't drift from the code.
