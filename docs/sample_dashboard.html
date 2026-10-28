@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Occupancy and Arrears</title><style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1c2430;--muted:#5d6b7c;--line:#e3e7ec;
+--accent:#1f6feb;--warn:#b54708;--bad:#b42318;--ok:#067647;--b1:#93c5fd;--b2:#3b82f6;--b3:#f59e0b;--b4:#dc2626}
+@media (prefers-color-scheme:dark){:root{--bg:#0f141a;--card:#171e26;--ink:#e6ebf1;--muted:#97a3b3;
+--line:#283240;--accent:#58a6ff;--warn:#f0a35e;--bad:#f97066;--ok:#47cd89}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:22px;margin:0}h2{font-size:16px;margin:28px 0 10px}
+.sub{color:var(--muted);margin:4px 0 20px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+.kpi .v{font-size:24px;font-weight:650;font-variant-numeric:tabular-nums}
+.kpi .l{color:var(--muted);font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+.bar{display:flex;height:22px;border-radius:6px;overflow:hidden;margin:6px 0 10px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
+.tbl{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:8px 7px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.03em}
+td.n{text-align:right;font-variant-numeric:tabular-nums}td.wrap{white-space:normal;min-width:280px}
+.tag{font-size:12px;padding:2px 8px;border-radius:99px;border:1px solid currentColor}
+.action{color:var(--bad)}.review{color:var(--warn)}.info{color:var(--muted)}.zero{color:var(--muted)}
+footer{margin-top:32px;color:var(--muted);font-size:13px}
+</style></head><body><main>
+<h1>Occupancy and Arrears</h1>
+<p class="sub">As of 31 October 2026 · merged from rent roll, accounting export
+and CRM export · sample data</p>
+<div class="kpis"><div class="kpi"><div class="v">70.0%</div><div class="l">Occupancy by units (7/10)</div></div><div class="kpi"><div class="v">67.3%</div><div class="l">Occupancy by sq ft (74,000/110,000)</div></div><div class="kpi"><div class="v">$74,200.00</div><div class="l">Arrears across 4 tenants</div></div><div class="kpi"><div class="v">$16,000.00</div><div class="l">Older than 90 days</div></div><div class="kpi"><div class="v">5</div><div class="l">Data issues needing action (9 total)</div></div></div>
+<h2>Summary</h2><div class="card"><p style="margin:0">As of 2026-10-31, 7 of 10 units are occupied (70.0% by units, 67.3% by square feet). 4 tenants owe $74,200.00 in total, of which $16,000.00 is more than 90 days old. Largest balances: Delta Cold Storage $48,800.00; Blue Harbor Freight Inc $12,800.00; Copperline Fabrication $10,000.00. 5 data issues need action before these numbers are final.</p>
+<p class="sub" style="margin:8px 0 0;font-size:13px">Source: template</p></div>
+<h2>Arrears aging</h2><div class="card"><div class="bar"><div style="width:43.80%;background:var(--b1)" title="0-30 days: $32,500.00"></div><div style="width:33.56%;background:var(--b2)" title="31-60 days: $24,900.00"></div><div style="width:1.08%;background:var(--b3)" title="61-90 days: $800.00"></div><div style="width:21.56%;background:var(--b4)" title="91+ days: $16,000.00"></div></div>
+<div class="legend"><span><span class="dot" style="background:var(--b1)"></span>0-30 days: $32,500.00</span><span><span class="dot" style="background:var(--b2)"></span>31-60 days: $24,900.00</span><span><span class="dot" style="background:var(--b3)"></span>61-90 days: $800.00</span><span><span class="dot" style="background:var(--b4)"></span>91+ days: $16,000.00</span></div></div>
+<h2>By tenant</h2><div class="card tbl"><table><thead><tr><th>Tenant</th><th>Unit</th>
+<th>Arrears</th><th>0-30</th><th>31-60</th><th>61-90</th><th>91+</th><th>Credit</th>
+<th>Contact</th><th>Last contact</th></tr></thead><tbody><tr><td>Delta Cold Storage</td><td>RB-201</td><td class="n">$48,800.00</td><td class="n">$16,000.00</td><td class="n">$16,000.00</td><td class="n">$800.00</td><td class="n">$16,000.00</td><td class="n zero">–</td><td>Marco Bianchi</td><td>2026-08-20 (72d)</td></tr><tr><td>Blue Harbor Freight Inc</td><td>NG-102</td><td class="n">$12,800.00</td><td class="n">$6,400.00</td><td class="n">$6,400.00</td><td class="n zero">–</td><td class="n zero">–</td><td class="n zero">–</td><td>Sam Okafor</td><td>2026-10-20 (11d)</td></tr><tr><td>Copperline Fabrication</td><td>NG-104</td><td class="n">$10,000.00</td><td class="n">$7,500.00</td><td class="n">$2,500.00</td><td class="n zero">–</td><td class="n zero">–</td><td class="n zero">–</td><td>Priya Nair</td><td>2026-09-10 (51d)</td></tr><tr><td>Granite Tool Rental</td><td>RB-205</td><td class="n">$2,600.00</td><td class="n">$2,600.00</td><td class="n zero">–</td><td class="n zero">–</td><td class="n zero">–</td><td class="n zero">–</td><td>Ana Silva</td><td>2026-10-28 (3d)</td></tr><tr><td>Acme Logistics LLC</td><td>NG-101</td><td class="n zero">–</td><td class="n zero">–</td><td class="n zero">–</td><td class="n zero">–</td><td class="n zero">–</td><td class="n zero">–</td><td>Dana Reyes</td><td>2026-10-05 (26d)</td></tr><tr><td>Evergreen Packaging Co</td><td>RB-202</td><td class="n zero">–</td><td class="n zero">–</td><td class="n zero">–</td><td class="n zero">–</td><td class="n zero">–</td><td class="n">$200.00</td><td>Lee Park</td><td>2026-10-15 (16d)</td></tr><tr><td>Falcon Parts Supply</td><td>RB-204</td><td class="n zero">–</td><td class="n zero">–</td><td class="n zero">–</td><td class="n zero">–</td><td class="n zero">–</td><td class="n zero">–</td><td><span class="action">no CRM record</span></td><td>–</td></tr></tbody></table></div>
+<h2>Data issues to fix</h2><div class="card tbl"><table><thead><tr><th>Severity</th><th>Type</th>
+<th>Ref</th><th>Detail</th></tr></thead><tbody><tr><td><span class="tag action">action</span></td><td>lease_expired_still_occupied</td><td>NG-102</td><td class="wrap">Blue Harbor Freight Inc lease ended 2026-05-31 but unit is marked occupied.</td></tr><tr><td><span class="tag action">action</span></td><td>charge_on_vacant_unit</td><td>INV-1001-203</td><td class="wrap">rent $4,000.00 posted to vacant unit RB-203. Excluded.</td></tr><tr><td><span class="tag action">action</span></td><td>unmatched_transaction</td><td>PAY-1012-109</td><td class="wrap">Unit &#x27;NG-109&#x27; is not on the rent roll (payment $1,500.00 from &#x27;Harbor Point Logistics&#x27;). Excluded.</td></tr><tr><td><span class="tag action">action</span></td><td>arrears_no_recent_contact</td><td>T003</td><td class="wrap">Copperline Fabrication owes $10,000.00; last CRM contact 51 days ago.</td></tr><tr><td><span class="tag action">action</span></td><td>arrears_no_recent_contact</td><td>T004</td><td class="wrap">Delta Cold Storage owes $48,800.00; last CRM contact 72 days ago.</td></tr><tr><td><span class="tag review">review</span></td><td>duplicate_transaction</td><td>PAY-1004-101</td><td class="wrap">Duplicate row in export (payment $9,000.00); counted once.</td></tr><tr><td><span class="tag review">review</span></td><td>name_mismatch</td><td>PAY-1029-204</td><td class="wrap">Posted to RB-204 (Falcon Parts Supply) but payer is &#x27;Granite Tool Rental&#x27;. Check for a mis-posting. Applied to the unit as recorded.</td></tr><tr><td><span class="tag review">review</span></td><td>no_crm_record</td><td>T006</td><td class="wrap">Falcon Parts Supply (RB-204) has no matching CRM contact.</td></tr><tr><td><span class="tag info">info</span></td><td>crm_record_not_in_rent_roll</td><td>Ironwood Storage</td><td class="wrap">CRM company &#x27;Ironwood Storage&#x27; is not a current tenant (prospect or former tenant?).</td></tr></tbody></table></div>
+<footer>Generated by property-arrears-dashboard. Rows the pipeline could not place are excluded
+from the figures and listed above rather than guessed.</footer>
+</main></body></html>
