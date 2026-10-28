@@ -16,6 +16,15 @@ All data in `data/` is invented sample data for two fictional industrial propert
 
 Open [`docs/sample_dashboard.html`](docs/sample_dashboard.html) in a browser for the generated page.
 
+## Interactive walkthrough
+
+A step-by-step interactive page shows the whole flow: the three messy inputs, cleaning, matching (and refusing to match), oldest-charge-first aging for any tenant, a "what if we skipped the duplicate check?" switch, the AI summary guard you can try yourself, and the final result.
+
+- Open [`docs/walkthrough.html`](docs/walkthrough.html) locally, or see it on outview.co.za (link added once published).
+- **Every number on the page comes from a real pipeline run.** `python walkthrough/build.py` exports the results (including a decision log for every accounting row and the FIFO trace per tenant) and embeds them in `docs/walkthrough.js`. The page replays them rather than re-calculating anything.
+- The one rule the page runs itself, the AI summary number check, is tested against the Python version on the same inputs (`tests/test_walkthrough_page.py`, runs where Playwright is installed).
+- CI rebuilds the page script and fails if it doesn't match the committed copy, so the published page can't drift from the code.
+
 ## What it does
 
 1. **Cleans** the fields each system writes differently: unit codes (`NG101`, `ng-101`, `NG 101`, `Unit NG-101` → `NG-101`), money (`$9,000.00`, `16,000.00`, `(250)`), and company names (`Blue Harbor Freight, Inc.` = `BLUE HARBOR FREIGHT`).
@@ -66,7 +75,7 @@ ruff check .
 pytest
 ```
 
-39 tests, run in GitHub Actions on every push. The core of it is an **eval against hand-worked answers**: before running the pipeline, the expected results for the sample data were calculated by hand, and the tests check the pipeline reproduces them exactly:
+49 tests (46 in CI; the 3 browser tests run where Playwright is installed), run in GitHub Actions on every push. The core of it is an **eval against hand-worked answers**: before running the pipeline, the expected results for the sample data were calculated by hand, and the tests check the pipeline reproduces them exactly:
 
 - Occupancy: 7 of 10 units (70.0%), 74,000 of 110,000 sq ft (67.3%)
 - Total arrears $74,200 across 4 tenants; buckets 0-30 $32,500, 31-60 $24,900, 61-90 $800, 91+ $16,000
@@ -94,6 +103,9 @@ arrears_dashboard/
   reconcile.py   matching, FIFO aging, occupancy, issue detection
   summary.py     template summary + optional LLM summary with number check
   report.py      HTML dashboard and CSV outputs
+  walkthrough.py export of decisions and FIFO traces for the interactive page
+walkthrough/     page script template + build.py
 data/            sample exports (fictional)
-tests/           eval against hand-worked answers + safeguard tests
+docs/            sample dashboard, screenshot, interactive walkthrough
+tests/           eval against hand-worked answers, safeguard tests, page tests
 ```
