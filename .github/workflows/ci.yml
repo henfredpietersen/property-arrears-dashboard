@@ -17,3 +17,7 @@ jobs:
       - run: pytest -q
       - name: Build the dashboard from sample data
         run: python -m arrears_dashboard --as-of 2026-10-31 --out output
+      - name: Check the published walkthrough matches the pipeline
+        run: |
+          python walkthrough/build.py
+          git diff --exit-code docs/walkthrough.js
