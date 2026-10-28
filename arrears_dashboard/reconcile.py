@@ -9,7 +9,7 @@ Rules (kept simple and explicit so they can be argued with):
   listed as an issue, instead of being guessed.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import pandas as pd
 
@@ -27,6 +27,8 @@ class Result:
     tenants: pd.DataFrame
     issues: pd.DataFrame
     totals: dict
+    ledger_log: list = field(default_factory=list)   # one entry per accounting row: kept / excluded / duplicate
+    allocations: dict = field(default_factory=dict)  # tenant_id -> FIFO lines (charge, applied, open, bucket)
 
 
 def bucket_for(days: int) -> str:
@@ -62,12 +64,21 @@ def _occupancy(rr: pd.DataFrame) -> dict:
     }
 
 
-def _clean_ledger(raw: pd.DataFrame, rr: pd.DataFrame, issues, name_threshold) -> pd.DataFrame:
+def _log(log, row, status, reason=""):
+    log.append({"row": int(row.name) + 2,  # +2: header line and 1-based numbering, as in a spreadsheet
+                "date": str(row["txn_date"])[:10], "unit_ref": row["unit_ref"],
+                "unit": unit_id(row["unit_ref"]), "customer": row["customer"],
+                "type": str(row["txn_type"]).strip().lower(), "amount": money(row["amount"]),
+                "reference": row["reference"], "status": status, "reason": reason})
+
+
+def _clean_ledger(raw: pd.DataFrame, rr: pd.DataFrame, issues, name_threshold, log, dedupe=True) -> pd.DataFrame:
     # 1. exact duplicate rows (same date, unit, amount, reference...) are double-posts
-    dup_mask = raw.duplicated(keep="first")
+    dup_mask = raw.duplicated(keep="first") if dedupe else pd.Series(False, index=raw.index)
     for _, row in raw[dup_mask].iterrows():
         _issue(issues, "duplicate_transaction", row["reference"],
                f"Duplicate row in export ({row['txn_type']} ${money(row['amount']):,.2f}); counted once.")
+        _log(log, row, "duplicate", "duplicate_transaction")
     led = raw[~dup_mask].copy()
 
     led["unit"] = led["unit_ref"].map(unit_id)
@@ -83,22 +94,28 @@ def _clean_ledger(raw: pd.DataFrame, rr: pd.DataFrame, issues, name_threshold) -
             _issue(issues, "unmatched_transaction", ref,
                    f"Unit '{row['unit_ref']}' is not on the rent roll ({row['txn_type']} "
                    f"${row['amount']:,.2f} from '{row['customer']}'). Excluded.", "action")
+            _log(log, raw.loc[idx], "excluded", "unmatched_transaction")
             continue
         unit = units.loc[row["unit"]]
         if unit["status"] != "occupied":
             _issue(issues, "charge_on_vacant_unit", ref,
                    f"{row['txn_type']} ${row['amount']:,.2f} posted to vacant unit {row['unit']}. Excluded.",
                    "action")
+            _log(log, raw.loc[idx], "excluded", "charge_on_vacant_unit")
             continue
         if row["txn_type"] not in CHARGE_TYPES | CREDIT_TYPES:
             _issue(issues, "unknown_txn_type", ref, f"Type '{row['txn_type']}' not recognised. Excluded.")
+            _log(log, raw.loc[idx], "excluded", "unknown_txn_type")
             continue
+        flag = ""
         if not is_blank(row["customer"]):
             score = name_similarity(row["customer"], unit["tenant_name"])
             if score < name_threshold:
+                flag = "name_mismatch"
                 _issue(issues, "name_mismatch", ref,
                        f"Posted to {row['unit']} ({unit['tenant_name']}) but payer is "
                        f"'{row['customer']}'. Check for a mis-posting. Applied to the unit as recorded.")
+        _log(log, raw.loc[idx], "kept", flag)
         keep.append(idx)
 
     led = led.loc[keep].copy()
@@ -110,18 +127,25 @@ def _age_tenant(rows: pd.DataFrame, as_of: pd.Timestamp) -> dict:
     charges = rows[rows["txn_type"].isin(CHARGE_TYPES)].sort_values("txn_date")
     paid = rows[rows["txn_type"].isin(CREDIT_TYPES)]["amount"].sum()
     out = {label: 0.0 for label, _, _ in BUCKETS}
+    lines = []
     remaining = paid
     for _, charge in charges.iterrows():
         applied = min(charge["amount"], remaining)
         remaining -= applied
         open_amount = round(charge["amount"] - applied, 2)
+        days = (as_of - charge["txn_date"]).days
         if open_amount > 0:
-            days = (as_of - charge["txn_date"]).days
             out[bucket_for(days)] += open_amount
+        lines.append({"date": f"{charge['txn_date']:%Y-%m-%d}", "type": charge["txn_type"],
+                      "reference": charge["reference"], "amount": charge["amount"],
+                      "applied": round(applied, 2), "open": open_amount, "days": days,
+                      "bucket": bucket_for(days) if open_amount > 0 else ""})
     balance = round(charges["amount"].sum() - paid, 2)
     out["balance"] = balance
     out["arrears"] = max(0.0, balance)
     out["credit"] = max(0.0, -balance)
+    out["paid"] = round(paid, 2)
+    out["lines"] = lines
     return out
 
 
@@ -148,9 +172,11 @@ def _match_crm(rr_tenants: pd.DataFrame, crm: pd.DataFrame, issues, threshold) -
     return matches
 
 
-def run(frames: dict, as_of, name_threshold: float = 0.75, contact_days: int = 30) -> Result:
+def run(frames: dict, as_of, name_threshold: float = 0.75, contact_days: int = 30,
+        dedupe: bool = True) -> Result:
+    """dedupe=False exists only to show what goes wrong without the duplicate check."""
     as_of = pd.Timestamp(as_of)
-    issues = []
+    issues, log, allocations = [], [], {}
 
     rr = _clean_rent_roll(frames["rent_roll"])
     occupancy = _occupancy(rr)
@@ -162,7 +188,7 @@ def run(frames: dict, as_of, name_threshold: float = 0.75, contact_days: int = 3
                    f"{t['tenant_name']} lease ended {t['lease_end']:%Y-%m-%d} but unit is marked occupied.",
                    "action")
 
-    ledger = _clean_ledger(frames["accounting"], rr, issues, name_threshold)
+    ledger = _clean_ledger(frames["accounting"], rr, issues, name_threshold, log, dedupe)
     crm = frames["crm"].copy()
     crm["last_contact"] = pd.to_datetime(crm["last_contact"].replace("", None))
     crm_by_tenant = _match_crm(tenants_rr, crm, issues, name_threshold)
@@ -170,6 +196,7 @@ def run(frames: dict, as_of, name_threshold: float = 0.75, contact_days: int = 3
     rows = []
     for _, t in tenants_rr.iterrows():
         aged = _age_tenant(ledger[ledger["tenant_id"] == t["tenant_id"]], as_of)
+        allocations[t["tenant_id"]] = {"paid": aged.pop("paid"), "lines": aged.pop("lines")}
         contact = crm_by_tenant.get(t["tenant_id"])
         last = contact["last_contact"] if contact is not None else pd.NaT
         days_since = (as_of - last).days if pd.notna(last) else None
@@ -204,7 +231,9 @@ def run(frames: dict, as_of, name_threshold: float = 0.75, contact_days: int = 3
         "issues_total": len(issues_df),
         "issues_action": int((issues_df["severity"] == "action").sum()),
     }
-    return Result(as_of=as_of, occupancy=occupancy, tenants=tenants, issues=issues_df, totals=totals)
+    log.sort(key=lambda e: e["row"])
+    return Result(as_of=as_of, occupancy=occupancy, tenants=tenants, issues=issues_df, totals=totals,
+                  ledger_log=log, allocations=allocations)
 
 
 __all__ = ["run", "Result", "BUCKETS", "bucket_for", "company"]
